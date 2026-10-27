@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.next/
+.next-electron/
+out/
+electron/release/
+electron/stage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Local database (personal data — never commit)
+backend/data/
+*.db
+*.db-journal
+
+# User-uploaded files (personal photos)
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/

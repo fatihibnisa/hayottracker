@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Day {
+  date   String  @id
+  rating Int?
+  note   String?
+}
+
+model ScheduleItem {
+  id        Int     @id @default(autoincrement())
+  dayOfWeek Int     @map("day_of_week")
+  subject   String
+  startTime String  @map("start_time")
+  endTime   String? @map("end_time")
+  room      String?
+
+  @@map("schedule")
+}
+
+model Topic {
+  id          Int       @id @default(autoincrement())
+  module      String
+  title       String
+  status      String    @default("todo")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  completedAt DateTime? @map("completed_at")
+  todos       Todo[]
+
+  @@map("topics")
+}
+
+model Todo {
+  id            Int       @id @default(autoincrement())
+  title         String
+  period        String    @default("daily")
+  dueDate       String?   @map("due_date")
+  time          String?
+  done          Boolean   @default(false)
+  sourceTopicId Int?      @map("source_topic_id")
+  sourceTopic   Topic?    @relation(fields: [sourceTopicId], references: [id], onDelete: SetNull)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  completedAt   DateTime? @map("completed_at")
+
+  @@map("todos")
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  type      String
+  category  String?
+  amount    Float
+  party     String?
+  reason    String?
+  date      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("transactions")
+}
+
+model Prayer {
+  id     Int    @id @default(autoincrement())
+  date   String
+  name   String
+  status String
+
+  @@unique([date, name])
+  @@map("prayers")
+}
+
+model QuranLog {
+  id         Int      @id @default(autoincrement())
+  date       String
+  reference  String
+  amount     String?
+  matchScore Int?     @map("match_score")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("quran_log")
+}
+
+model QuranGoal {
+  id              Int       @id @default(autoincrement())
+  reference       String
+  referenceText   String?   @map("reference_text")
+  targetDate      String?   @map("target_date")
+  surahNumber     Int?      @map("surah_number")
+  totalAyahs      Int?      @map("total_ayahs")
+  memorizedAyahs  Int       @default(0) @map("memorized_ayahs")
+  ayahsPerSession Int       @default(5) @map("ayahs_per_session")
+  achieved        Boolean   @default(false)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  achievedAt      DateTime? @map("achieved_at")
+
+  @@map("quran_goals")
+}
+
+model TopicSession {
+  id        Int      @id @default(autoincrement())
+  topicId   Int      @map("topic_id")
+  date      String
+  minutes   Int?
+  note      String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("topic_sessions")
+}
+
+model Settings {
+  id                  Int      @id @default(1)
+  theme               String   @default("light")
+  language            String   @default("uz")
+  city                String   @default("Tashkent")
+  country             String   @default("Uzbekistan")
+  backgroundType       String   @default("preset") @map("background_type")
+  backgroundPresetId  String?  @default("aurora") @map("background_preset_id")
+  backgroundImagePath String?  @map("background_image_path")
+  backgroundPosition  String   @default("center") @map("background_position")
+  glassOpacity        String   @default("transparent") @map("glass_opacity")
+  accentColor         String   @default("blue") @map("accent_color")
+  fontScale           String   @default("md") @map("font_scale")
+  profileName         String?  @map("profile_name")
+  profileImagePath    String?  @map("profile_image_path")
+  pinEnabled          Boolean  @default(false) @map("pin_enabled")
+  pinHash             String?  @map("pin_hash")
+  pinLockTimeout      String   @default("immediate") @map("pin_lock_timeout")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
+
+model Skill {
+  id           Int            @id @default(autoincrement())
+  name         String
+  category     String?
+  icon         String?
+  description  String?
+  targetDate   String?        @map("target_date")
+  planMinutes  Int?           @map("plan_minutes")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  sessions     SkillSession[]
+
+  @@map("skills")
+}
+
+model SkillSession {
+  id        Int      @id @default(autoincrement())
+  skillId   Int      @map("skill_id")
+  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  date      String
+  minutes   Int?
+  note      String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("skill_sessions")
+}
+
+model HadithEntry {
+  id          Int             @id @default(autoincrement())
+  number      Int             @unique
+  bookName    String          @default("Sahih al-Bukhari") @map("book_name")
+  link        String
+  status      String          @default("new")
+  textArabic  String?         @map("text_arabic")
+  textRu      String?         @map("text_ru")
+  textEn      String?         @map("text_en")
+  memorizedAt DateTime?       @map("memorized_at")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  sessions    HadithSession[]
+
+  @@map("hadith_entries")
+}
+
+model HadithSession {
+  id        Int         @id @default(autoincrement())
+  hadithId  Int         @map("hadith_id")
+  hadith    HadithEntry @relation(fields: [hadithId], references: [id], onDelete: Cascade)
+  date      String
+  minutes   Int?
+  note      String?
+  createdAt DateTime    @default(now()) @map("created_at")
+
+  @@map("hadith_sessions")
+}

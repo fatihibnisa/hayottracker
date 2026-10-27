@@ -1,0 +1,24 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: file:../data/hayot.db
+      PORT: 4000
+    volumes:
+      - backend_data:/app/data
+    ports:
+      - '4000:4000'
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      API_URL: http://backend:4000
+    depends_on:
+      - backend
+    ports:
+      - '3000:3000'
+
+volumes:
+  backend_data:

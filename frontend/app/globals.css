@@ -1,0 +1,301 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px rgba(31, 38, 61, 0.1);
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --sidebar-bg: rgba(255, 255, 255, 0.45);
+
+  /* runtime-selectable accent color (RGB triplet, consumed by tailwind.config.ts) */
+  --accent: 10 132 255;
+
+  /* dataviz: chart surfaces & ink (see references/palette.md) */
+  --chart-surface: #fcfcfb;
+  --chart-page: #f9f9f7;
+  --chart-ink-primary: #0b0b0b;
+  --chart-ink-secondary: #52514e;
+  --chart-ink-muted: #898781;
+  --chart-grid: #e1e0d9;
+  --chart-axis: #c3c2b7;
+  --chart-success-text: #006300;
+
+  /* dataviz: categorical series, fixed order, never cycled */
+  --series-1: #2a78d6; /* blue */
+  --series-2: #eb6834; /* orange */
+  --series-3: #1baf7a; /* aqua */
+  --series-4: #eda100; /* yellow */
+  --series-5: #e87ba4; /* magenta */
+  --series-6: #008300; /* green */
+  --series-7: #6250d6; /* violet */
+  --series-8: #e34948; /* red */
+
+  /* dataviz: status palette, fixed, never themed */
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-serious: #ec835a;
+  --status-critical: #d03b3b;
+}
+
+html.dark {
+  color-scheme: dark;
+  --glass-bg: rgba(30, 30, 34, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --sidebar-bg: rgba(20, 20, 24, 0.5);
+
+  --chart-surface: #1a1a19;
+  --chart-page: #0d0d0d;
+  --chart-ink-primary: #f0efec;
+  --chart-ink-secondary: #c3c2b7;
+  --chart-ink-muted: #898781;
+  --chart-grid: #2c2c2a;
+  --chart-axis: #383835;
+  --chart-success-text: #0ca30c;
+
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+}
+
+/* Background presets — selected via data-bg on <body>, 4 neutral styles + custom image */
+body[data-bg='aurora'] {
+  --bg-gradient: radial-gradient(circle at 15% 0%, #dce8ff 0%, transparent 45%),
+    radial-gradient(circle at 85% 10%, #ffe3f1 0%, transparent 45%),
+    radial-gradient(circle at 50% 100%, #d7f5ec 0%, transparent 55%), #f2f3f7;
+}
+body[data-bg='sunset'] {
+  --bg-gradient: radial-gradient(circle at 10% 10%, #ffe4cc 0%, transparent 50%),
+    radial-gradient(circle at 90% 20%, #ffd3e0 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, #ffecd2 0%, transparent 55%), #fbf4ee;
+}
+body[data-bg='forest'] {
+  --bg-gradient: radial-gradient(circle at 20% 0%, #dcf4e3 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, #d8eee0 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, #e7f5d6 0%, transparent 55%), #f3f7f1;
+}
+body[data-bg='mono'] {
+  --bg-gradient: radial-gradient(circle at 20% 0%, #eceef2 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, #e6e7eb 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, #f1f1f3 0%, transparent 55%), #f4f4f6;
+}
+html.dark body[data-bg='aurora'] {
+  --bg-gradient: radial-gradient(circle at 15% 0%, #1b2a4a 0%, transparent 45%),
+    radial-gradient(circle at 85% 10%, #3a1b33 0%, transparent 45%),
+    radial-gradient(circle at 50% 100%, #10342c 0%, transparent 55%), #0b0c10;
+}
+html.dark body[data-bg='sunset'] {
+  --bg-gradient: radial-gradient(circle at 10% 10%, #3a2414 0%, transparent 50%),
+    radial-gradient(circle at 90% 20%, #3a1a26 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, #2e2416 0%, transparent 55%), #121010;
+}
+html.dark body[data-bg='forest'] {
+  --bg-gradient: radial-gradient(circle at 20% 0%, #0f2a1a 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, #122a1e 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, #1a2a10 0%, transparent 55%), #0c100c;
+}
+html.dark body[data-bg='mono'] {
+  --bg-gradient: radial-gradient(circle at 20% 0%, #1c1c1f 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, #19191c 0%, transparent 50%),
+    radial-gradient(circle at 50% 100%, #1e1e21 0%, transparent 55%), #0e0e10;
+}
+
+body[data-bg='custom'] {
+  background-size: cover;
+  background-position: var(--bg-position, center);
+  background-attachment: fixed;
+}
+body[data-bg='custom']::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: inherit;
+  background-position: var(--bg-position, center);
+  z-index: -2;
+}
+/* Legibility scrim over a custom photo background so glass cards stay readable */
+body[data-bg='custom']::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.4);
+  z-index: -1;
+}
+html.dark body[data-bg='custom']::after {
+  background: rgba(8, 8, 10, 0.55);
+}
+
+/* Runtime accent color presets — selected via data-accent on <body> */
+body[data-accent='blue'] { --accent: 10 132 255; }
+body[data-accent='violet'] { --accent: 125 95 255; }
+body[data-accent='green'] { --accent: 52 170 103; }
+body[data-accent='orange'] { --accent: 255 149 0; }
+body[data-accent='pink'] { --accent: 255 69 120; }
+body[data-accent='teal'] { --accent: 36 170 170; }
+html.dark body[data-accent='blue'] { --accent: 64 156 255; }
+html.dark body[data-accent='violet'] { --accent: 158 133 255; }
+html.dark body[data-accent='green'] { --accent: 78 191 128; }
+html.dark body[data-accent='orange'] { --accent: 255 171 64; }
+html.dark body[data-accent='pink'] { --accent: 255 110 156; }
+html.dark body[data-accent='teal'] { --accent: 84 199 199; }
+
+/* Font scale presets — selected via data-font-scale on <html> */
+html[data-font-scale='sm'] { font-size: 14px; }
+html[data-font-scale='md'] { font-size: 16px; }
+html[data-font-scale='lg'] { font-size: 18px; }
+
+/* Glass opacity mode — data-glass="opaque" on <body> flattens the glassmorphism */
+body[data-glass='opaque'] .glass {
+  --glass-bg: #fcfcfb;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+html.dark body[data-glass='opaque'] .glass {
+  --glass-bg: #1c1c1f;
+}
+body[data-glass='opaque'] .glass-sidebar {
+  background: #fcfcfb;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+html.dark body[data-glass='opaque'] .glass-sidebar {
+  background: #1c1c1f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100vh;
+}
+
+body {
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.3s ease;
+}
+
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+}
+
+.glass-sidebar {
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-right: 1px solid var(--glass-border);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 128, 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.35s ease-out both;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-modal-in {
+  animation: modal-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-pop-in {
+  animation: pop-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes ring-grow {
+  from {
+    stroke-dashoffset: var(--ring-circumference, 0);
+  }
+}
+
+/* Vivid CTA tones, drawn from the dataviz categorical palette */
+.cta-tone-blue { background: color-mix(in srgb, var(--series-1) 16%, transparent); color: var(--series-1); }
+.cta-tone-orange { background: color-mix(in srgb, var(--series-2) 18%, transparent); color: var(--series-2); }
+.cta-tone-teal { background: color-mix(in srgb, var(--series-3) 16%, transparent); color: var(--series-3); }
+.cta-tone-yellow { background: color-mix(in srgb, var(--series-4) 20%, transparent); color: var(--series-4); }
+.cta-tone-pink { background: color-mix(in srgb, var(--series-5) 16%, transparent); color: var(--series-5); }
+.cta-tone-green { background: color-mix(in srgb, var(--series-6) 16%, transparent); color: var(--series-6); }
+.cta-tone-violet { background: color-mix(in srgb, var(--series-7) 16%, transparent); color: var(--series-7); }
+.cta-tone-red { background: color-mix(in srgb, var(--series-8) 16%, transparent); color: var(--series-8); }
+
+/* Islamic geometric motif — decorative, used on the Religious page only */
+.islamic-pattern {
+  background-image: radial-gradient(circle at 10px 10px, rgba(10, 132, 255, 0.08) 1.5px, transparent 1.6px),
+    radial-gradient(circle at 30px 30px, rgba(10, 132, 255, 0.08) 1.5px, transparent 1.6px);
+  background-size: 40px 40px;
+}
+html.dark .islamic-pattern {
+  background-image: radial-gradient(circle at 10px 10px, rgba(64, 156, 255, 0.12) 1.5px, transparent 1.6px),
+    radial-gradient(circle at 30px 30px, rgba(64, 156, 255, 0.12) 1.5px, transparent 1.6px);
+}
